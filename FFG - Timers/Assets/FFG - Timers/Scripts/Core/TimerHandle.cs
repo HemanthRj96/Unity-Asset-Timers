@@ -34,8 +34,8 @@ namespace FFG
             _repeatCount = repeatCount;
 
             // Adding error correction time
-            _totalElapsedTime = Time.time == 0 ? -0.02f : 0;
-            _cachedTime = Time.time;
+            _totalElapsedTime = Time.unscaledTime == 0 ? -0.02f : 0;
+            _cachedTime = Time.unscaledTime;
             _canTick = true;
             _lapCount = 1;
             _isFirstTick = true;
@@ -59,7 +59,7 @@ namespace FFG
                 _onTimerBeginCallback?.Invoke();
             }
 
-            _totalElapsedTime += Time.deltaTime;
+            _totalElapsedTime += Time.unscaledDeltaTime;
 
             if (_timerDuration == -1)
                 return;
@@ -67,9 +67,9 @@ namespace FFG
             {
                 if (_lapCount < _repeatCount)
                 {
-                    float err = (Time.time - _cachedTime) - _timerDuration;
+                    float err = (Time.unscaledTime - _cachedTime) - _timerDuration;
                     _totalElapsedTime = err;
-                    _cachedTime = Time.time - err;
+                    _cachedTime = Time.unscaledTime - err;
                     ++_lapCount;
                     _onTimerCompleteCallback?.Invoke();
                 }
